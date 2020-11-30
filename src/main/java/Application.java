@@ -1,55 +1,78 @@
 import org.kohsuke.github.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Application {
 
-    public static void main(String[] args) throws IOException {
+    private final String token = "tokenString";
+    private GitHub github;
+
+    public static void main(String[] args){
 
         Application app = new Application();
-        app.printDashBoard();
+
+        try {
+            app.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private void printDashBoard() throws IOException {
+    private void run() throws IOException {
 
-        GitHub github = GitHub.connect();
-        //GHRepository ghRepository = github.getRepository(Repo name);
-        GHRepository ghRepository = github.getRepository("Lob-dev/DashBoardDemo");
+        // 연결
+        connectGitApi();
 
-        // issue = Issue # 1
-        GHIssue issue = ghRepository.getIssue(1);
+        GHRepository ghRepository = github.getRepository("whiteship/live-study");
+        // 참여자 이름, 참여 횟수
+        Map<String, Integer> participant = new HashMap<>();
+        // 각각의 Issue 에 존재하는 comment 들을 저장.
+        List<GHIssueComment> commentList = new ArrayList<>();
 
-        //public List<GHIssueComment> getComments() throws IOException {
-        //        return listComments().toList();
-        //    }
-        //public List<T> toList() throws IOException {
-        //        return Collections.unmodifiableList(Arrays.asList(this.toArray()));
-        //    }
+        //Find Issue
+        for (int index = 1; index < 19; index++) {
+            GHIssue issue = ghRepository.getIssue(index);
+            commentList = issue.getComments();
 
-        // issue 내부의 comment 를 리스트로 저장. 반환이 list.
-        List<GHIssueComment> issueComments = issue.getComments();
+            // 혹시 모를 유저 중복을 제거하기 위한 Set
+            Set<String> nameList = new HashSet<>();
 
-        for (GHIssueComment comments : issueComments){
-            GHUser user = comments.getUser(); // user info 가져오고
+            addParticipantInSet(commentList, nameList);
+
+            // 참여자 명단에서 비교한다.
+            for (String s : nameList) {
+                hasParticipantInSet(participant, s);
+            }
         }
 
+        printParticipantRate(participant);
+    }
 
-        //public GHIssueState getState() {
-        //        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
-        //}
-        // public enum GHIssueState {
-        //    OPEN, CLOSED, ALL
-        //}
+    private void hasParticipantInSet(Map<String, Integer> participant, String s) {
+        if (!participant.containsKey(s)){
+            participant.put(s, 1);
+        } else {
+            Integer integer = participant.get(s);
+            participant.put(s, ++integer);
+        }
+    }
 
-        // 상탯값 가져오기.
-        GHIssueState issueState = issue.getState();
+    private void addParticipantInSet(List<GHIssueComment> commentList, Set<String> name) throws IOException {
+        for (GHIssueComment ghIssueComment : commentList) {
+            name.add(ghIssueComment.getUser().getLogin());
+        }
+    }
 
-        // 브랜치 가져오기
-        GHBranch ghBranch = ghRepository.getBranch("main");
+    private void printParticipantRate(Map<String, Integer> participant) {
+        participant.forEach((key, value)-> {
+            double percent = (double) (value * 100) / 18;
+            System.out.println(key+"  :  "+String.format("%.2f", percent)+"%");
+        });
+    }
 
+    private void connectGitApi() throws IOException {
+        github = new GitHubBuilder().withOAuthToken(token).build();
     }
 }
