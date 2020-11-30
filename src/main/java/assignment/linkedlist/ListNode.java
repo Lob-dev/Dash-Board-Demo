@@ -1,7 +1,5 @@
 package assignment.linkedlist;
 
-import org.w3c.dom.Node;
-
 public class ListNode {
 
     private int elements;
