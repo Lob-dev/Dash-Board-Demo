@@ -1,3 +1,5 @@
+package assignment.gitapi;
+
 import org.kohsuke.github.*;
 
 import java.io.IOException;
@@ -27,13 +29,13 @@ public class Application {
         GHRepository ghRepository = github.getRepository("whiteship/live-study");
         // 참여자 이름, 참여 횟수
         Map<String, Integer> participant = new HashMap<>();
-        // 각각의 Issue 에 존재하는 comment 들을 저장.
-        List<GHIssueComment> commentList = new ArrayList<>();
+        // 모든 이슈를 가져온다.
+        List<GHIssue> issues = ghRepository.getIssues(GHIssueState.ALL);
 
         //Find Issue
-        for (int index = 1; index < 19; index++) {
-            GHIssue issue = ghRepository.getIssue(index);
-            commentList = issue.getComments();
+        for (GHIssue issue : issues) {
+            // 각각의 Issue 에 존재하는 comment 들을 저장.
+            List<GHIssueComment> commentList = issue.getComments();
 
             // 혹시 모를 유저 중복을 제거하기 위한 Set
             Set<String> nameList = new HashSet<>();
@@ -45,7 +47,6 @@ public class Application {
                 hasParticipantInSet(participant, s);
             }
         }
-
         printParticipantRate(participant);
     }
 
