@@ -7,11 +7,10 @@ import java.util.*;
 
 public class Application {
 
-    private final String token = "tokenString";
+    private final String token = "31cd4197cd58d3d052f7bcb4b55dca51b429586d";
     private GitHub github;
 
-    public static void main(String[] args){
-
+    public static void main(String[] args) {
         Application app = new Application();
 
         try {
@@ -22,7 +21,6 @@ public class Application {
     }
 
     private void run() throws IOException {
-
         // 연결
         connectGitApi();
 
@@ -51,7 +49,7 @@ public class Application {
     }
 
     private void hasParticipantInSet(Map<String, Integer> participant, String s) {
-        if (!participant.containsKey(s)){
+        if (!participant.containsKey(s)) {
             participant.put(s, 1);
         } else {
             Integer integer = participant.get(s);
@@ -66,9 +64,9 @@ public class Application {
     }
 
     private void printParticipantRate(Map<String, Integer> participant) {
-        participant.forEach((key, value)-> {
+        participant.forEach((key, value) -> {
             double percent = (double) (value * 100) / 18;
-            System.out.println(key+"  :  "+String.format("%.2f", percent)+"%");
+            System.out.printf(key + "  :  " + "%.2f", percent+ "%");
         });
     }
 
