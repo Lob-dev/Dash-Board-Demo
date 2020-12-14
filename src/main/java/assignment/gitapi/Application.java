@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Application {
 
-    private final String token = "31cd4197cd58d3d052f7bcb4b55dca51b429586d";
+    private final String token = "token";
     private GitHub github;
 
     public static void main(String[] args) {
