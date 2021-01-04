@@ -1,7 +1,7 @@
-package example;
+package accessexample;
 
-import example.accessmodifiers.ProtectClass;
-import example.accessmodifiers.ProtectExample;
+import accessexample.accessmodifiers.ProtectClass;
+import accessexample.accessmodifiers.ProtectExample;
 
 public class ProtectExample3 {
 

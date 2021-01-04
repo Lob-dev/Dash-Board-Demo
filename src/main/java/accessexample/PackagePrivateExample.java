@@ -1,8 +1,6 @@
-package example;
+package accessexample;
 
-import example.accessmodifiers.PackagePrivateClass;
-import example.accessmodifiers.ProtectClass;
-import example.accessmodifiers.ProtectExample;
+import accessexample.accessmodifiers.PackagePrivateClass;
 
 public class PackagePrivateExample {
 

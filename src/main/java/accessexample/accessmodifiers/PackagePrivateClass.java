@@ -1,4 +1,4 @@
-package example.accessmodifiers;
+package accessexample.accessmodifiers;
 
 public class PackagePrivateClass {
     final String name = "Lob!";
